@@ -1,5 +1,7 @@
 import os
 import re
+import builtins
+builtins.unicode = str
 # We'll render HTML templates and access data sent by POST using the request object from flask. Redirect and url_for
 # will be used to redirect the user once the upload is done and send_from_directory will help us to send/show on the
 # browser the file that the user just uploaded
