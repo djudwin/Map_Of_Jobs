@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+        <title>Map of Jobs</title>
+        <link rel="stylesheet" type="text/css" href="../static/styles.css">
+        <link href="{{ url_for('bower.static', filename='bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+	</head>
+	<body ng-controller="map_of_jobs_controller">
+        <div class="col-lg-12>
+            <div class="container-fluid">
+                <div class="well">
+                	<h2><strong>Map Of Jobs</strong></h2>
+                </div>
+            </div>
+        </div>
+        <script src="{{ url_for('bower.static', filename='jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('bower.static', filename='angular/angular.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='pcapViz.js') }}"></script>
+	</body>
+</html>
