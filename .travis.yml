@@ -10,6 +10,7 @@ before_script:
   - pip install Flask
   - pip install Flask_Bower
   - pip install Flask_Compress
+  - pip install Flask_Triangle
 
 script:
   - python map_jobs.py
