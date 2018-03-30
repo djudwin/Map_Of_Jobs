@@ -1,6 +1,13 @@
+'use strict';
 
-var map_of_jobs = angular.module('map_of_jobs', []);
+var map_of_jobs = angular.module('map_of_jobs', ['ngMap']);
 
-map_of_jobs.controller(map_of_jobs_controller, function($scope, $http) {
-	
+map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window, NgMap) {
+	NgMap.getMap().then(function(map) {
+    console.log(map.getCenter());
+    console.log('markers', map.markers);
+    console.log('shapes', map.shapes);
+  });
+
+	$scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnGj_CJuLQjEjd94i0MOvQVB4FDLRpdec";
 });
