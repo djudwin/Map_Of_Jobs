@@ -8,6 +8,8 @@ branches:
 
 before_script:
   - pip install Flask
+  - pip install Flask_Bower
+  - pip install Flask_Compress
 
 script:
   - python map_jobs.py
