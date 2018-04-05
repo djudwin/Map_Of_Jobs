@@ -1,18 +1,18 @@
 language: python
 python:
-  - "2.7"
+  - "3.6"
 
 branches:
   only:
     - master
 
 before_script:
-  - pip3.6 install Flask
-  - pip3.6 install Flask_Bower
-  - pip3.6 install Flask_Compress
-  - pip3.6 install Flask_Triangle
+  - pip install Flask
+  - pip install Flask_Bower
+  - pip install Flask_Compress
+  - pip install Flask_Triangle
 
 script:
-  - python3 map_jobs.py
+  - python map_jobs.py
 
 
