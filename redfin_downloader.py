@@ -11,6 +11,9 @@ import csv
 import time
 import glob
 import fileinput
+import requests
+from bs4 import BeautifulSoup
+import re
 
 # the file paths for the webdriver parameters will need to be modified to work on other computers
 download_path = os.getcwd() + "/csv_data/"
@@ -133,12 +136,13 @@ def merge_data():
 
 def filter_data():
     # we will need to get these parameters from the website:
-    minBedrooms = 2
-    minBathrooms = 1
-    propertyTypes = {'Townhouse', 'Single Family Residential'}
-    minHouseSize = 500
-    minPropertySize = 0
-    maxPrice = 40000
+    minBedrooms = 1  # minimum number of bedrooms
+    minBathrooms = 1.0  # minimum number of bathrooms
+    propertyTypes = {'Townhouse', 'Single Family Residential', 'Condo/Co-op'}  # property types requested
+    minHouseSize = 300  # minimum house size in sq ft
+    minPropertySize = 0  # minimum property size in sq ft
+    maxPrice = 200000  # max house price
+    maxCrimes = 5  # max crimes per day
 
     properties = open('_all_properties.csv', 'r')
     filtered = open('filtered_properties.csv', 'w')
@@ -162,14 +166,46 @@ def filter_data():
         elif row['PRICE'] and float(row['PRICE']) > maxPrice:
             keep = False
 
+        else:
+            area = row['LOCATION']
+            state = row['STATE']
+            city = row['CITY']
+            print(state + " " + city + " " + area)
+            url = "http://spotcrime.com/analytics/"+state+"/"+city+"/"+area
+            r = requests.get(url)
+            data = r.text
+            soup = BeautifulSoup(data, "html.parser")
+            lines = soup.find_all('p')
+            count = 0
+            sum = 0
+            for line in lines:
+                if 'recorded' in line.text:
+                    count += 1
+                    value = line.text.partition('recorded ')
+                    num = value[2].partition(' ')
+                    print(num[0])
+                    if "," in num[0]:
+                        mynum = num[0].partition(',')
+                        print(mynum[0] + "   " + mynum[2])
+                        sum += float(mynum[0])*1000
+                        sum += float(mynum[2])
+                    else:
+                        sum += float(num[0])
+                    if count == 3:
+                        if(float(sum) / 30) > maxCrimes:
+                            keep = False
+                        break
+#            main_table = soup.find_all(text=re.compile('recorded <!-- -->'))
+
+#            print(main_table)
         if keep:
             file2.writerow(row)
 
 
 clean_folder()  # remove old csv files
 collect_by_location('baltimore, MD')  # get all house listings in Baltimore MD
-# collect_by_location(zip='21228')  # get all house listings in zip code 21228
-# collect_by_location(school='UMBC')  # get all house listings near UMBC
+#collect_by_location('21228')  # get all house listings in zip code 21228
+#collect_by_location('UMBC')  # get all house listings near UMBC
 merge_data()  # merge all house listings into one csv
 # From here we can sift on other parameters, like # bedrooms, # bathrooms, Property Type, House Size, and Property Size
 filter_data()
