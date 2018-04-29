@@ -170,7 +170,6 @@ def filter_data():
             area = row['LOCATION']
             state = row['STATE']
             city = row['CITY']
-            print(state + " " + city + " " + area)
             url = "http://spotcrime.com/analytics/"+state+"/"+city+"/"+area
             r = requests.get(url)
             data = r.text
@@ -183,10 +182,8 @@ def filter_data():
                     count += 1
                     value = line.text.partition('recorded ')
                     num = value[2].partition(' ')
-                    print(num[0])
                     if "," in num[0]:
                         mynum = num[0].partition(',')
-                        print(mynum[0] + "   " + mynum[2])
                         sum += float(mynum[0])*1000
                         sum += float(mynum[2])
                     else:
@@ -195,9 +192,6 @@ def filter_data():
                         if(float(sum) / 30) > maxCrimes:
                             keep = False
                         break
-#            main_table = soup.find_all(text=re.compile('recorded <!-- -->'))
-
-#            print(main_table)
         if keep:
             file2.writerow(row)
 
