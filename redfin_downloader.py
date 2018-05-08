@@ -28,14 +28,14 @@ Triangle(app)
 
 # the file paths for the webdriver parameters will need to be modified to work on other computers
 download_path = os.getcwd() + "/csv_data/"
-fp = webdriver.FirefoxProfile()#"/Users/JessicaDeng/Library/Application Support/Firefox/Profiles/14aqd9s3.default-1525396620364")
+fp = webdriver.FirefoxProfile("/Users/JessicaDeng/Library/Application Support/Firefox/Profiles/14aqd9s3.default-1525396620364")
 fp.set_preference("browser.download.folderList", 2)
 fp.set_preference("browser.download.manager.showWhenStarting", False)
 fp.set_preference("browser.download.dir", download_path)
 fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "text/csv")
 
 browser = webdriver.Firefox(firefox_profile=fp)
-browser.get("https://www.redfin.com")
+#browser.get("https://www.redfin.com")
 
 
 class wait_for_page_load(object):
@@ -145,6 +145,7 @@ def merge_data():
             print(line)  # standard output is now redirected to the file
 
 
+@app.route('/map_data', methods=['GET'])
 def filter_data():
     # we will need to get these parameters from the website:
     minBedrooms = 1  # minimum number of bedrooms
@@ -206,6 +207,8 @@ def filter_data():
         if keep:
             file2.writerow(row)
 
+    return jsonify(file2)
+
 
 '''clean_folder()  # remove old csv files
 collect_by_location('baltimore, MD')  # get all house listings in Baltimore MD
@@ -215,14 +218,16 @@ merge_data()  # merge all house listings into one csv
 # From here we can sift on other parameters, like # bedrooms, # bathrooms, Property Type, House Size, and Property Size
 filter_data()'''
 
+'''
 @app.route('/map_data', methods=['GET'])
 def push_to_front_end():
     properties = open('_all_properties.csv', 'r')
     filtered = open('filtered_properties.csv', 'w')
     file1 = csv.DictReader(properties, )
     file2 = csv.DictWriter(filtered, fieldnames=file1.fieldnames)
-    data1 = list(file1)
-    return jsonify(data1)
+    data1 = list(file2)
+    print(data1)
+    return jsonify(data1)'''
 
 
 # Home page
@@ -235,6 +240,7 @@ def main():
     merge_data()  # merge all house listings into one csv
     # From here we can sift on other parameters, like # bedrooms, # bathrooms, Property Type, House Size, and Property Size
     filter_data()
+    #push_to_front_end()
     return render_template('index.html')
 
 if __name__ == '__main__':
