@@ -1,0 +1,11 @@
+body{
+	background-color:blue;
+	text-align:center
+}
+
+.map{
+	width:100%;
+    position:absolute;
+    top:0;
+    padding:0;
+}

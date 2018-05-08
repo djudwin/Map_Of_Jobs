@@ -10,4 +10,10 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
   });
 
 	$scope.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnGj_CJuLQjEjd94i0MOvQVB4FDLRpdec";
+
+	$scope.populateMap = function(){
+
+	};
 });
+
+

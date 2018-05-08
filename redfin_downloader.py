@@ -3,6 +3,9 @@
 # parameters from the user input on the website.
 
 import os
+import builtins
+builtins.unicode = str
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -14,10 +17,18 @@ import fileinput
 import requests
 from bs4 import BeautifulSoup
 import re
+from flask import Flask, render_template, request, jsonify, redirect, session, url_for, send_from_directory
+from flask_bower import Bower
+from flask_triangle import Triangle
+from werkzeug import secure_filename
+
+app = Flask(__name__)
+Bower(app)
+Triangle(app)
 
 # the file paths for the webdriver parameters will need to be modified to work on other computers
 download_path = os.getcwd() + "/csv_data/"
-fp = webdriver.FirefoxProfile("/Library/Application Support/Firefox/Profiles/p9sqpxhh.SeleniumProfile")
+fp = webdriver.FirefoxProfile()#"/Users/JessicaDeng/Library/Application Support/Firefox/Profiles/14aqd9s3.default-1525396620364")
 fp.set_preference("browser.download.folderList", 2)
 fp.set_preference("browser.download.manager.showWhenStarting", False)
 fp.set_preference("browser.download.dir", download_path)
@@ -196,10 +207,27 @@ def filter_data():
             file2.writerow(row)
 
 
-clean_folder()  # remove old csv files
+'''clean_folder()  # remove old csv files
 collect_by_location('baltimore, MD')  # get all house listings in Baltimore MD
 #collect_by_location('21228')  # get all house listings in zip code 21228
 #collect_by_location('UMBC')  # get all house listings near UMBC
 merge_data()  # merge all house listings into one csv
 # From here we can sift on other parameters, like # bedrooms, # bathrooms, Property Type, House Size, and Property Size
-filter_data()
+filter_data()'''
+
+
+# Home page
+@app.route('/')
+def main():
+    clean_folder()  # remove old csv files
+    collect_by_location('baltimore, MD')  # get all house listings in Baltimore MD
+    #collect_by_location('21228')  # get all house listings in zip code 21228
+    #collect_by_location('UMBC')  # get all house listings near UMBC
+    merge_data()  # merge all house listings into one csv
+    # From here we can sift on other parameters, like # bedrooms, # bathrooms, Property Type, House Size, and Property Size
+    filter_data()
+    return render_template('index.html')
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8081,debug=True)
+

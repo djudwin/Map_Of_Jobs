@@ -7,17 +7,15 @@ builtins.unicode = str
 # browser the file that the user just uploaded
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for, send_from_directory
 from flask_bower import Bower
+from flask_triangle import Triangle
 from werkzeug import secure_filename
 
 # Triangle is very important and fixes the Angular / Flask {} issue; 
-from flask_triangle import Triangle
-from flask_compress import Compress
 
 # Initialize the Flask application
 app = Flask(__name__)
 Bower(app)
 Triangle(app)
-Compress(app)
 
 # Home page
 @app.route('/')
