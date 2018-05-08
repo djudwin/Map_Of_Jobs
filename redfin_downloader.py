@@ -215,6 +215,15 @@ merge_data()  # merge all house listings into one csv
 # From here we can sift on other parameters, like # bedrooms, # bathrooms, Property Type, House Size, and Property Size
 filter_data()'''
 
+@app.route('/map_data', methods=['GET'])
+def push_to_front_end():
+    properties = open('_all_properties.csv', 'r')
+    filtered = open('filtered_properties.csv', 'w')
+    file1 = csv.DictReader(properties, )
+    file2 = csv.DictWriter(filtered, fieldnames=file1.fieldnames)
+    data1 = list(file1)
+    return jsonify(data1)
+
 
 # Home page
 @app.route('/')

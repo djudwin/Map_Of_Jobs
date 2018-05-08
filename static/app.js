@@ -14,6 +14,10 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 	$scope.populateMap = function(){
 
 	};
+
+	$http({url:'map_data', method:"GET"}).success(function(map_data){
+		cosole.log(map_data);
+	}
 });
 
 
