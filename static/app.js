@@ -17,7 +17,7 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 
 	$http({url:'map_data', method:"GET"}).success(function(map_data){
 		cosole.log(map_data);
-	}
+	});
 });
 
 
