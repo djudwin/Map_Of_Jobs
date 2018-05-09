@@ -20,7 +20,7 @@ import re
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for, send_from_directory
 from flask_bower import Bower
 from flask_triangle import Triangle
-from werkzeug import secure_filename
+#from werkzeug import secure_filename
 
 app = Flask(__name__)
 Bower(app)
@@ -28,7 +28,7 @@ Triangle(app)
 
 # the file paths for the webdriver parameters will need to be modified to work on other computers
 download_path = os.getcwd() + "/csv_data/"
-fp = webdriver.FirefoxProfile("/Users/JessicaDeng/Library/Application Support/Firefox/Profiles/14aqd9s3.default-1525396620364")
+fp = webdriver.FirefoxProfile()#"/Users/JessicaDeng/Library/Application Support/Firefox/Profiles/14aqd9s3.default-1525396620364")
 fp.set_preference("browser.download.folderList", 2)
 fp.set_preference("browser.download.manager.showWhenStarting", False)
 fp.set_preference("browser.download.dir", download_path)
@@ -127,7 +127,6 @@ def merge_data():
                 if filename in skip:
                     print("skip: " + filename)
                     continue
-                print("file:" + filename)
                 header = next(fin)
                 if not header_saved:
                     fout.write(header)
@@ -159,7 +158,8 @@ def filter_data():
     properties = open('_all_properties.csv', 'r')
     filtered = open('filtered_properties.csv', 'w')
     file1 = csv.DictReader(properties, )
-    file2 = csv.DictWriter(filtered, fieldnames=file1.fieldnames)
+    #file2 = csv.DictWriter(filtered, fieldnames=file1.fieldnames)
+    file2 = []
     data1 = list(file1)
 
     for row in data1:
@@ -205,7 +205,7 @@ def filter_data():
                             keep = False
                         break
         if keep:
-            file2.writerow(row)
+            file2.append(row)
 
     return jsonify(file2)
 
@@ -245,4 +245,3 @@ def main():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8081,debug=True)
-
