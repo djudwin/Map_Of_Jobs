@@ -2,21 +2,28 @@
 <html lang="en" ng-app="map_of_jobs">
 	<head>
 		<meta charset="utf-8">
-        <title>Map of Jobs</title>
+        <title>Realty Map Filter</title>
+
+        <!-- Google font -->
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"> 
+
         <link rel="stylesheet" type="text/css" href="../static/styles.css">
         <link href="{{ url_for('bower.static', filename='bootstrap\\dist\\css\\bootstrap.min.css') }}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="../static/styles.css">
 	</head>
 	<body ng-controller="map_of_jobs_controller" style="text-align:center">
-        <h2><strong>Map Of Jobs Test</strong></h2>
+        <div class='site-header'>
+            <h2>Realty Map Filter</h2>
+            <h5>developed by <i>/* No Comment */</i></h5>
+        </div>
 
         <div id="map-container" ng-class="{'has-results': showing_results, '': !showing_results}">
             <div id="results-list">
                 <h3>Results</h3>
 
                 <div ng-repeat="h in search.results">
-                    <h4>{{ h.address }}</h4>
-                    <p>{{ h.zipcode }}</p>
+                    <h4>{{h.address}}</h4>
+                    <p>{{h.zipcode}}</p>
                 </div>
             </div>
 
@@ -26,13 +33,12 @@
         </div>
 
         <div id="search-container">
-            <h3>Search for housing</h3>
-
-            <div ng-submit="search.submit()">
+            <div class="search-form" ng-submit="search.submit()">
+                <h3>Search for housing</h3>
                 <form novalidate>
-                    street: <input type="text" ng-model="search.street"><br>
-                    city: <input type="text" ng-model="search.city"><br>
-                    zip code: <input type="text" ng-model="search.zip"><br>
+                    <label>street</label>   <input type="text" ng-model="search.street"><br>
+                    <label>city</label>     <input type="text" ng-model="search.city"><br>
+                    <label>zip code</label> <input type="text" ng-model="search.zip"><br>
 
                     <button ng-click="submit()">SUBMIT</button>
                 </form>

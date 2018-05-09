@@ -23,8 +23,8 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 		submit: function() {
 			var results = [
 				{address: '50 bobby lane', zipcode: 12345},
-				{address: '51 bobby lane', zipcode: 12345},
-				{address: '52 bobby lane', zipcode: 12345}
+				{address: '51 bobby lane', zipcode: 12346},
+				{address: '52 bobby lane', zipcode: 12347}
 			];
 
 			$scope.search.results = results;
