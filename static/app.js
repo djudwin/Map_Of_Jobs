@@ -20,15 +20,18 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 	});
 
 	$scope.search = {
-		submit: function() {
-			var results = [
+		test: ["1","2"],
+		results: [
 				{address: '50 bobby lane', zipcode: 12345},
 				{address: '51 bobby lane', zipcode: 12346},
 				{address: '52 bobby lane', zipcode: 12347}
-			];
-
-			$scope.search.results = results;
-
+		],
+		submit: function() {
+			$scope.search.results.push({
+				address: $scope.street,
+				city: $scope.city,
+				zipcode: $scope.zip
+			});
 
 			// toggle results div class
 			$scope.showing_results = true;
