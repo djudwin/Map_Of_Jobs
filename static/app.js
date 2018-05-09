@@ -1,6 +1,6 @@
 'use strict';
 
-var map_of_jobs = angular.module('map_of_jobs', ['ngMap']);
+var map_of_jobs = angular.module('map_of_jobs', ['ngMap', 'angularUtils.directives.dirPagination']);
 
 map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window, NgMap) {
 	NgMap.getMap().then(function(map) {
@@ -14,6 +14,9 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 	$scope.populateMap = function(){
 		console.log('hi')
 	};
+
+	$scope.table_columns = ['Street', 'Zipcode']
+	$scope.table_results = {'street': '123 fun street', 'Zipcode': '12345'}
 
 	$http({url:'map_data', method:"GET"}).then(function(map_data){
 		console.log(map_data);
@@ -36,6 +39,8 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 			// toggle results div class
 			$scope.showing_results = true;
 		}
+
+
 	}
 })
 
