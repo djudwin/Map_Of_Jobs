@@ -1,0 +1,23 @@
+{
+  "name": "Map_Of_Jobs",
+  "homepage": "https://github.com/djudwin/Map_Of_Jobs",
+  "authors": [
+    "Xavier Harris <xharris1@umbc.edu>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.9",
+    "ngmap": "^1.18.4",
+    "jquery": "^3.3.1",
+    "bootstrap": "^4.0.0"
+  }
+}
