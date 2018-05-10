@@ -29,8 +29,8 @@
                 <h3>Search for housing</h3>
                 <form novalidate>
                     <label>location</label><input type="text" ng-model="location" size="50" placeholder="enter 'city state', 'state' or 'zip'">
-+                   <br>
-+                   <label>Property Types:</label>
+                   <br>
+                   <label>Property Types:</label>
                     <input type="checkbox" ng-model="townhouse" name="townhouse" value=1> <label for="townhouse">Townhouse</label>
                     <input type="checkbox" ng-model="house" name="house" value=1> <label for="house">House</label>
                     <input type="checkbox" ng-model="condo" name="condo" value=1> <label for="condo">Condo</label>
@@ -49,12 +49,12 @@
                         <option value=10>10</option>
                     </select>
                     <br>
-+                    <label for="beds">Bedrooms</label><input type="number" name="beds" ng-model="beds" step="1" min="0">
-+                    <br>
-+                    <label for="baths">Bathrooms</label><input type="number" name="baths" ng-model="baths" step="0.5" min="0">
-+                    <br>
-+                    <label for="price">Price range</label>
-+                    <select name="price" ng-model = "price">
+                    <label for="beds">Bedrooms</label><input type="number" name="beds" ng-model="beds" step="1" min="0">
+                    <br>
+                    <label for="baths">Bathrooms</label><input type="number" name="baths" ng-model="baths" step="0.5" min="0">
+                    <br>
+                    <label for="price">Price range</label>
+                    <select name="price" ng-model = "price">
                         <option value="0,100000"><$100,000</option>
                         <option value="100000,200000">$100,000 - $200,000</option>
                         <option value="200000,400000">$200,000 - $400,000</option>
@@ -65,9 +65,9 @@
                     </select>
 
                     <br>
-+                   <label for="size">Minimum House Size in SqFt</label>
-+                   <input type="number" name="size" ng-model="size" step="50" min="0">
-+                   <br>
+                   <label for="size">Minimum House Size in SqFt</label>
+                   <input type="number" name="size" ng-model="size" step="50" min="0">
+                   <br>
                     <button ng-click="submit_button()">SUBMIT</button>
                 </form>
             </div>
