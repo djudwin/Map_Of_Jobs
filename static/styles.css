@@ -82,3 +82,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', end
 #search-container input {
 	margin-bottom: 10px;
 }
+#search-container .search-form form {
+	column-count: 2;
+}
