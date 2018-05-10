@@ -139,8 +139,13 @@ def parse(location,rating):
             price = ''.join(raw_price).strip() if raw_price else None
             if price:
                 price = price.split('$')[1]
-                price1, price2 = price.split(',') if price else None
-                price = int(price1) * 1000 + float(price2[:3]) if price1 and price2 else None
+                if len(price.split(',')) > 1:
+                    price1, price2 = price.split(',') if price else None
+                    price = int(price1) * 1000 + float(price2[:3]) if price1 and price2 else None
+                else:
+                    if price[-1] == 'K':
+                        price = int(price[:-1])*1000
+                    price = int(price)
             info = ' '.join(' '.join(raw_info).split()).replace(u"\xb7", ',')
             row = info.split(' ')
             beds = row[0] if row[0] != "--" else None
