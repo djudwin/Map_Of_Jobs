@@ -9,9 +9,9 @@ with open("templates/index.html") as f:
 		re_result = re.match(r"(.*)(filename='[\w\/]+.*')(.*)",x)
 		if re_result:
 			if TARGET_OS == 'WIN':
-				file_text += re_result.group(1) + re_result.group(2).replace('/','\\\\') + re_result.group(3)
+				file_text += re_result.group(1) + re_result.group(2).replace('/','\\\\') + re_result.group(3) + '\n'
 			else:	
-				file_text += re_result.group(1) + re_result.group(2).replace('\\\\','/') + re_result.group(3)
+				file_text += re_result.group(1) + re_result.group(2).replace('\\\\','/') + re_result.group(3) + '\n'
 		else:
 			file_text += x
 
