@@ -4,9 +4,9 @@ var map_of_jobs = angular.module('map_of_jobs', ['ngMap', 'angularUtils.directiv
 
 map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window, NgMap) {
     NgMap.getMap().then(function (map) {
-        // console.log(map.getCenter());
-        // console.log('markers', map.markers);
-        // console.log('shapes', map.shapes);
+        console.log(map.getCenter());
+        console.log('markers', map.markers);
+        console.log('shapes', map.shapes);
     });
 
     $scope.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAnGj_CJuLQjEjd94i0MOvQVB4FDLRpdec";
@@ -15,15 +15,18 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
         console.log('hi')
     };
 
-    $scope.table_columns = ['Street', 'Zipcode'];
-    $scope.table_results = {'street': '123 fun street', 'Zipcode': '12345'};
 
+    $scope.search = {
+        test: ["1", "2"],
+        results: []};
+    $scope.search.results.push({});
 
-    $scope.search = {}
-    $scope.search.results = [];
-
-	// toggle results div class
+    // toggle results div class
 	$scope.showing_results = true;
+
+	$scope.table_columns = ['type','address', 'city', 'state','zip','beds','baths','price','size','crimes'];
+	$scope.table_results = []; //{'street': '123 fun street', 'Zipcode': '12345'};
+
 
 	$scope.townhouse = 0;
 	$scope.house = 0;
@@ -33,23 +36,10 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 	$scope.location = "";
 	$scope.rating = 0;
 	$scope.size = 0;
-	$scope.price = "0,50000";
+	$scope.rating = 1;
+	$scope.price = "0,100000";
 
     $scope.submit_button = function () {
-        $scope.types = [];
-        $scope.types[0] = 'unknown';
-        var i = 1;
-        if ($scope.townhouse == 1) {
-            $scope.types[i] = 'Townhouse';
-            i++;
-        }
-        if ($scope.house == 1) {
-            $scope.types[i] = 'House';
-            i++;
-        }
-        if ($scope.condo == 1) {
-            $scope.types[i] = 'Condo';
-        }
 
 
         var data = {
@@ -57,26 +47,43 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
             'townhouse': $scope.townhouse,
 			'house': $scope.house,
 			'condo': $scope.condo,
-            'rating': parseInt($scope.rating),
+            'rating': $scope.rating,
             'price': $scope.price,
             'beds': $scope.beds,
             'baths': $scope.baths,
             'size': $scope.size
         };
 
-/*
-        $http({url: 'map_data', method: "GET",param: data}).then(function (map_data) {
+
+        /*$http({url: 'map_data', method: "GET",param: data}).then(function (map_data) {
         	console.log(map_data);
-    	});
-*/
+    	});*/
+
         $http({
             url: '/get_data',
             method: "POST",
             data: JSON.stringify(data),
             headers: {'Content-Type': 'application/json; charset=utf-8'}
-        }).then(function (result) {
-            console.log(result)
-			$scope.search.results = result.data;
+        }).then(function (data) {
+            //console.log(data);
+			console.log(data);
+
+            for (var i = 0; i < data.data.length; i++){
+            	$scope.table_results.push({'type':data.data[i]['type'],
+											'address':data.data[i]['address'],
+											'city':data.data[i]['city'],
+											'state':data.data[i]['state'],
+											'zip':data.data[i]['postal_code'],
+											'beds': data.data[i]['beds'],
+											'baths':data.data[i]['baths'],
+											'price':data.data[i]['price'],
+											'size':data.data[i]['size'],
+											'crimes':data.data[i]['crimes']}
+											);
+            	//console.log("hello");
+            }
+
+			//$scope.search.results = data;
 			$scope.showing_results = true;
         });
 
