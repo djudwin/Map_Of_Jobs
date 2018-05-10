@@ -24,15 +24,11 @@
                 <div class='house' ng-repeat="h in search.results">
                     <!--<h4>HELLO</h4>-->
                     <div class='header'>{{h.address|angular}} ({{h.type|angular}})</div>
-                    <p>{{h.city|angular}}, {{h.state|angular}} {{h.zip|angular}}</p>
-                    <p>
-                        {{h.beds|angular}} bed(s)</br>
-                        {{h.baths|angular}} bath(s)</br>
-                        {{h.size|angular}} sq ft.</br>
-                    </p>
-                    <p>price: ${{h.price|angular}}</p>
-                    <p>crime rate: {{h.crimes|angular}}</p>
-
+                    <p>{{h.city|angular}}, {{h.state|angular}} {{h.zip|angular}}</p><br/>
+                    <p>{{h.beds|angular}} bed(s), {{h.baths|angular}} bath(s), {{h.size|angular}} sq ft.</p></br>
+                    <p>price: ${{h.price|angular}}</p><br/>
+                    <p>crime rate: {{h.crimes|angular}}</p><br/>
+                    <a href="{{h.url|angular}}">More info</a>
                 </div>
 
                 <!--table class="table table-striped table-hover">

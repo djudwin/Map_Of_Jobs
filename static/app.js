@@ -19,17 +19,11 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
     $scope.table_results = {'street': '123 fun street', 'Zipcode': '12345'};
 
 
-    $scope.search = {
-        test: ["1", "2"],
-        results: [
-            {"address": '50 bobby lane', "postal_code": 12345},
-			{"address": '51 bobby lane', "postal_code": 12346},
-			{"address": '52 bobby lane', "postal_code":12347}
-			]};
-    	$scope.search.results.push({});
+    $scope.search = {}
+    $scope.search.results = [];
 
-    	// toggle results div class
-    	$scope.showing_results = true;
+	// toggle results div class
+	$scope.showing_results = true;
 
 	$scope.townhouse = 0;
 	$scope.house = 0;

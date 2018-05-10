@@ -61,12 +61,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', end
 	overflow-y: auto;
 	display: inline-block;
 }
+#results-list .house {
+	border-bottom: 1px solid #0D47A1;
+	margin-bottom: 10px;
+	padding-bottom: 10px;;
+	transition: ease-in-out 0.1s all;
+}
+#results-list .house:hover {
+	background-color: rgba(255,255,255,0.5);
+}
 #results-list .header {
 	font-size: 14px;
 }
 #results-list p {
 	display: inline-block;
 	font-size: 12px;
+	margin: 0;
 }
 
 /*

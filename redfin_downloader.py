@@ -319,6 +319,7 @@ def get_data():
     #while(request.args.get('data') == None):
     #    time.sleep(0.5)
 
+    print(request.get_data())
     data = re.search(r"\{\"location\":\"(\w+)\",\"townhouse\":(true|false|0),\"house\":(true|false|0),\"condo\":(true|false|0),\"rating\":(\d+),\"price\":\"([\d,]+)\",\"beds\":(\d+),\"baths\":([\d\.]+),\"size\":(\d+)\}", str(request.get_data())).groups()
 
     minBedrooms = int(data[6])  # minimum number of bedrooms

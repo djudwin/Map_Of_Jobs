@@ -1,26 +1,26 @@
 type,address,city,state,postal_code,price,beds,baths,size,url
-Auction,2630 Greene Rd,BALDWIN,MD,21013,375000,4,4,6783.0,https://www.zillow.com/homedetails/2630-Greene-Rd-Baldwin-MD-21013/121175235_zpid/
-House,4403 Silverbrook Ln APT A101,OWINGS MILLS,MD,21117,130000.0,3,2,1144.0,https://www.zillow.com/homedetails/4403-Silverbrook-Ln-APT-A101-Owings-Mills-MD-21117/36332116_zpid/
-Condo,322 Sunset Dr UNIT 2,OCEAN CITY,MD,21842,154000.0,2,2,904.0,https://www.zillow.com/homedetails/322-Sunset-Dr-UNIT-2-Ocean-City-MD-21842/67870210_zpid/
-New,630 Potomac Ave,SILVER SPRING,MD,20910,1088088.0,8,4,4251.0,https://www.zillow.com/homedetails/630-Potomac-Ave-Silver-Spring-MD-20910/37278645_zpid/
-House,12716 Center Park Way,UPPER MARLBORO,MD,20772,214900.0,4,4,,https://www.zillow.com/homedetails/12716-Center-Park-Way-Upper-Marlboro-MD-20772/37513088_zpid/
+Coming,110 Thomas Gantt Rd,HUNTINGTOWN,MD,20639,499900.0,4,3,2510.0,https://www.zillow.com/homedetails/110-Thomas-Gantt-Rd-Huntingtown-MD-20639/82134430_zpid/
 Townhouse,5018 Woodlands Glen Rd,BALTIMORE,MD,21209,219900.0,3,3,1472.0,https://www.zillow.com/homedetails/5018-Woodlands-Glen-Rd-Baltimore-MD-21209/36622605_zpid/
-House,342 Old Joppa Rd,FALLSTON,MD,21047,339900.0,5,3,2096.0,https://www.zillow.com/homedetails/342-Old-Joppa-Rd-Fallston-MD-21047/36954641_zpid/
-House,8716 Fendley Way,Waldorf,MD,20603,329900.0,4,2,1872.0,https://www.zillow.com/homedetails/8716-Fendley-Way-Waldorf-MD-20603/36722776_zpid/
-House,110 S Symington Ave,Baltimore,MD,21228,255000.0,3,1,1231.0,https://www.zillow.com/homedetails/110-S-Symington-Ave-Baltimore-MD-21228/36202658_zpid/
-Townhouse,3316 Midland Ct,ABINGDON,MD,21009,189900.0,3,3,1980.0,https://www.zillow.com/homedetails/3316-Midland-Ct-Abingdon-MD-21009/36926824_zpid/
-House,3618 Village Dr N,UPPER MARLBORO,MD,20772,337000.0,4,3,1665.0,https://www.zillow.com/homedetails/3618-Village-Dr-N-Upper-Marlboro-MD-20772/37361674_zpid/
-House,9313 Colesville Rd,SILVER SPRING,MD,20901,675000.0,5,3,2724.0,https://www.zillow.com/homedetails/9313-Colesville-Rd-Silver-Spring-MD-20901/37282570_zpid/
-House,302 Camillia Pl,Baltimore,MD,21229,222000.0,3,3,1550.0,https://www.zillow.com/homedetails/302-Camillia-Pl-Baltimore-MD-21229/241969935_zpid/
-House,815 Falcon Dr,UPPER MARLBORO,MD,20774,300000.0,4,3,,https://www.zillow.com/homedetails/815-Falcon-Dr-Upper-Marlboro-MD-20774/37480203_zpid/
-Townhouse,14727 Mcknew Rd,BURTONSVILLE,MD,20866,339900.0,3,4,2016.0,https://www.zillow.com/homedetails/14727-Mcknew-Rd-Burtonsville-MD-20866/37148640_zpid/
-House,609 Otter Creek Rd,EDGEWOOD,MD,21040,275000.0,3,3,2680.0,https://www.zillow.com/homedetails/609-Otter-Creek-Rd-Edgewood-MD-21040/36936418_zpid/
-House,11 Shipwright St,ANNAPOLIS,MD,21401,2650650.0,4,4,4060.0,https://www.zillow.com/homedetails/11-Shipwright-St-Annapolis-MD-21401/36134791_zpid/
-House,4723 Bates Dr,ELLICOTT CITY,MD,21043,499900.0,3,3,1853.0,https://www.zillow.com/homedetails/4723-Bates-Dr-Ellicott-City-MD-21043/37026677_zpid/
-House,456 Royal Beach Rd,PASADENA,MD,21122,759900.0,3,3,1912.0,https://www.zillow.com/homedetails/456-Royal-Beach-Rd-Pasadena-MD-21122/36071742_zpid/
-unknown,6005 Parker Dr,DEALE,MD,20751,499000.0,4,3,2300.0,https://www.zillow.com/homedetails/6005-Parker-Dr-Deale-MD-20751/36150232_zpid/
-House,116 Windjammer Rd,OCEAN PINES,MD,21811,229900.0,3,2,1200.0,https://www.zillow.com/homedetails/116-Windjammer-Rd-Ocean-Pines-MD-21811/37727664_zpid/
-House,2909 Evergreen Way,ELLICOTT CITY,MD,21042,519900.0,4,3,2066.0,https://www.zillow.com/homedetails/2909-Evergreen-Way-Ellicott-City-MD-21042/37035338_zpid/
-House,4926 Graceton Rd,Pylesville,MD,21132,289900.0,3,3,2560.0,https://www.zillow.com/homedetails/4926-Graceton-Rd-Pylesville-MD-21132/64603641_zpid/
-House,102 Coventry Way,HAVRE DE GRACE,MD,21078,345000.0,4,3,2731.0,https://www.zillow.com/homedetails/102-Coventry-Way-Havre-De-Grace-MD-21078/60544386_zpid/
 House,255 Community Center Ave,Gaithersburg,MD,20878,445000.0,3,3,2892.0,https://www.zillow.com/homedetails/255-Community-Center-Ave-Gaithersburg-MD-20878/110284191_zpid/
+House,815 Falcon Dr,UPPER MARLBORO,MD,20774,300000.0,4,3,,https://www.zillow.com/homedetails/815-Falcon-Dr-Upper-Marlboro-MD-20774/37480203_zpid/
+unknown,6005 Parker Dr,DEALE,MD,20751,499000.0,4,3,2300.0,https://www.zillow.com/homedetails/6005-Parker-Dr-Deale-MD-20751/36150232_zpid/
+House,6057 Toomey Ln,ELKRIDGE,MD,21075,650000.0,4,4,4134.0,https://www.zillow.com/homedetails/6057-Toomey-Ln-Elkridge-MD-21075/58255619_zpid/
+House,14010 Quinn Ln,BALDWIN,MD,21013,475000.0,4,3,,https://www.zillow.com/homedetails/14010-Quinn-Ln-Baldwin-MD-21013/36205813_zpid/
+House,539 Coover Rd,ANNAPOLIS,MD,21401,679900.0,5,5,5188.0,https://www.zillow.com/homedetails/539-Coover-Rd-Annapolis-MD-21401/54887339_zpid/
+House,3604 Aspen Ct,DAVIDSONVILLE,MD,21035,520000.0,4,3,2800.0,https://www.zillow.com/homedetails/3604-Aspen-Ct-Davidsonville-MD-21035/35986543_zpid/
+House,431 S Dallas St,BALTIMORE,MD,21231,258000.0,3,1,,https://www.zillow.com/homedetails/431-S-Dallas-St-Baltimore-MD-21231/36437618_zpid/
+House,827 N Woodington Rd,BALTIMORE,MD,21229,160000.0,3,2,,https://www.zillow.com/homedetails/827-N-Woodington-Rd-Baltimore-MD-21229/36507509_zpid/
+Auction,2630 Greene Rd,BALDWIN,MD,21013,375000,4,4,6783.0,https://www.zillow.com/homedetails/2630-Greene-Rd-Baldwin-MD-21013/121175235_zpid/
+House,8716 Fendley Way,Waldorf,MD,20603,329900.0,4,2,1872.0,https://www.zillow.com/homedetails/8716-Fendley-Way-Waldorf-MD-20603/36722776_zpid/
+House,3618 Village Dr N,UPPER MARLBORO,MD,20772,337000.0,4,3,1665.0,https://www.zillow.com/homedetails/3618-Village-Dr-N-Upper-Marlboro-MD-20772/37361674_zpid/
+House,2279 Westwood Dr,Waldorf,MD,20601,420000.0,4,3,2866.0,https://www.zillow.com/homedetails/2279-Westwood-Dr-Waldorf-MD-20601/82129632_zpid/
+House,456 Royal Beach Rd,PASADENA,MD,21122,759900.0,3,3,1912.0,https://www.zillow.com/homedetails/456-Royal-Beach-Rd-Pasadena-MD-21122/36071742_zpid/
+House,2909 Evergreen Way,ELLICOTT CITY,MD,21042,519900.0,4,3,2066.0,https://www.zillow.com/homedetails/2909-Evergreen-Way-Ellicott-City-MD-21042/37035338_zpid/
+House,1618 Sailaway Cir,Baltimore,MD,21221,359900.0,5,4,3048.0,https://www.zillow.com/homedetails/1618-Sailaway-Cir-Baltimore-MD-21221/58271718_zpid/
+Townhouse,14727 Mcknew Rd,BURTONSVILLE,MD,20866,339900.0,3,4,2016.0,https://www.zillow.com/homedetails/14727-Mcknew-Rd-Burtonsville-MD-20866/37148640_zpid/
+House,102 Coventry Way,HAVRE DE GRACE,MD,21078,345000.0,4,3,2731.0,https://www.zillow.com/homedetails/102-Coventry-Way-Havre-De-Grace-MD-21078/60544386_zpid/
+House,800 Queens Park Dr,OWINGS MILLS,MD,21117,599000.0,5,4,,https://www.zillow.com/homedetails/800-Queens-Park-Dr-Owings-Mills-MD-21117/58270422_zpid/
+House,3416 Queen Mary Dr,OLNEY,MD,20832,649900.0,4,2,2012.0,https://www.zillow.com/homedetails/3416-Queen-Mary-Dr-Olney-MD-20832/37202065_zpid/
+House,5608 Lasalle Ln,Sykesville,MD,21784,449000.0,4,3,2910.0,https://www.zillow.com/homedetails/5608-Lasalle-Ln-Sykesville-MD-21784/36757982_zpid/
+House,845 Park Ave,BALTIMORE,MD,21201,679900.0,5,4,,https://www.zillow.com/homedetails/845-Park-Ave-Baltimore-MD-21201/36469832_zpid/
+Townhouse,3316 Midland Ct,ABINGDON,MD,21009,189900.0,3,3,1980.0,https://www.zillow.com/homedetails/3316-Midland-Ct-Abingdon-MD-21009/36926824_zpid/
