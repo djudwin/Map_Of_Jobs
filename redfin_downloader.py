@@ -140,9 +140,12 @@ def parse(location,rating):
             price = ''.join(raw_price).strip() if raw_price else None
             if price:
                 price = price.split('$')[1]
-                if len(price.split(',')) > 1:
+                if len(price.split(',')) == 2:
                     price1, price2 = price.split(',') if price else None
                     price = int(price1) * 1000 + float(price2[:3]) if price1 and price2 else None
+                elif len(price.split(','))==3:
+                    price1, price2, price3 = price.split(',') if price else None
+                    price = int(price1) * 1000000 + float(price2[:3]) * 1000 + float(price2[:3]) if price1 and price2 and price3 else None
                 else:
                     if price[-1] == 'K':
                         price = int(price[:-1])*1000
@@ -174,7 +177,7 @@ def parse(location,rating):
                 'price': price,
                 'beds': beds,
                 'baths': baths,
-                'house size': size,
+                'size': size,
                 'url': property_url,
                 'type': type
             }
@@ -246,7 +249,7 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
     for row in data1:
         keep = True
 
-        if row['house size'] and float(row['house size']) < float(minHouseSize):
+        if row['size'] and float(row['size']) < float(minHouseSize):
             print('size')
             keep = False
         elif row['beds'] and int(row['beds']) < int(minBedrooms):
@@ -288,7 +291,7 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
                         #     print('crime: %d'%(int(sum)/90))
                         #     keep = False
                         # else:
-                        row['crimes/day'] = float(sum) / 90
+                        row['crimes'] = float(sum) / 90
                         break
         if keep:
             file2.append(row)
@@ -345,7 +348,7 @@ def get_data():
     scraped_data = parse(location, rating)
     # print("Writing data to output file")
     with open("_all_properties.csv", 'w')as csvfile:
-        fieldnames = ['type', 'address', 'city', 'state', 'postal_code', 'price', 'beds', 'baths', 'house size', 'url']
+        fieldnames = ['type', 'address', 'city', 'state', 'postal_code', 'price', 'beds', 'baths', 'size', 'url']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for row in scraped_data:
