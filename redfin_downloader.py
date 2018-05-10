@@ -15,7 +15,7 @@ import fileinput
 import requests
 from bs4 import BeautifulSoup
 import re
-from flask import Flask, render_template, request, jsonify, redirect, session, url_for, send_from_directory
+from flask import Flask, render_template, request, jsonify, redirect, session, url_for, send_from_directory, Response
 from flask_bower import Bower
 from flask_triangle import Triangle
 from werkzeug.utils import secure_filename
@@ -146,10 +146,11 @@ def parse(location,rating):
             beds = row[0] if row[0] != "--" else None
             baths = row[3] if row[3] != "--" else None
             size = row[6] if row[6] != "--" else None
-            if size == '--':
+            if size == '--' or size is None:
                 size = None
             else:
-                size = "%s%s"%(size[0],size[2:])
+                if len(size.split(',')) > 1:
+                    size = "%s%s"%(size.split(',')[0],size.split(',')[1])
                 size = float(size)
             broker = ''.join(raw_broker_name).strip() if raw_broker_name else None
             title = ''.join(raw_title) if raw_title else None
@@ -208,7 +209,7 @@ def merge_data():
             print(line)  # standard output is now redirected to the file
 
 
-@app.route('/map_data', methods=['GET'])
+#@app.route('/map_data', methods=['GET'])
 
 def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,maxPrice):
 
@@ -239,19 +240,19 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
     for row in data1:
         keep = True
 
-        if row['house size'] and float(row['house size']) < minHouseSize:
+        if row['house size'] and float(row['house size']) < float(minHouseSize):
             print('size')
             keep = False
-        elif row['beds'] and int(row['beds']) < minBedrooms:
+        elif row['beds'] and int(row['beds']) < int(minBedrooms):
             print('bedrooms')
             keep = False
-        elif row['baths'] and float(row['baths']) < minBathrooms:
+        elif row['baths'] and float(row['baths']) < float(minBathrooms):
             print('bathrooms')
             keep = False
         elif row['type'] not in propertyTypes:
             print('type')
             keep = False
-        elif row['price'] != "--" and float(row['price']) > maxPrice:
+        elif row['price'] != "--" and (float(row['price']) > float(maxPrice) or float(row['price']) < float(minPrice)):
             print('price')
             keep = False
 
@@ -286,7 +287,7 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
         if keep:
             file2.append(row)
 
-    return jsonify(file2)
+    return file2
 
 
 
@@ -302,27 +303,41 @@ def push_to_front_end():
     return jsonify(data1)'''
 
 
-@app.route('/search_input', methods=['POST'])
+#@app.route('/get_data')
+@app.route('/get_data', methods=['GET','POST'])
 def get_data():
 
-    while(request.form.get('location') == None):
-        time.sleep(0.5)
+    #while(request.args.get('data') == None):
+    #    time.sleep(0.5)
 
-    minBedrooms = request.form.get('beds')  # minimum number of bedrooms
-    minBathrooms = request.form.get('baths')  # minimum number of bathrooms
-    propertyTypes = request.form.get('property_types')  # property types requested
-    minHouseSize = request.form.get('size')  # minimum house size in sq ft
-    price = request.form.get('price')  # max house price
-    location = request.form.get('location')
-    rating = request.form.get('rating')
-    minPrice = maxPrice = None
-    if price != None and price[0] == '-':
+    print("\n\n\nHEREEEEEEE\n\n\n")
+    data = str(request.get_data()).split(',')
+    print("HIII" + str(data))
+    #print(data['location'][0])
+    minBedrooms = data[7].split(':')[1]  # minimum number of bedrooms
+    minBathrooms = data[8].split(':')[1]  # minimum number of bathrooms
+    types = [data[1].split(':')[1],data[2].split(':')[1],data[3].split(':')[1]]  # property types requested
+    propertyTypes = []
+    if types[0] == 'true':
+        propertyTypes.append('Townhouse')
+    if types[1] == 'true':
+        propertyTypes.append('House')
+    if types[2] == 'true:':
+        propertyTypes.append('Condo')
+    minHouseSize = data[9].split(':')[1].split('}')[0]  # minimum house size in sq ft
+    price = (data[5]+','+data[6]).split(':')[1]  # max house price
+    location = data[0].split(':')[1]
+    rating = data[4].split(':')[1]
+    minPrice = maxPrice = 0
+    #price = price.split(':')[1]
+    price = price.split('"')[1]
+    if price != 0 and price[0] == '-':
         minPrice = int(price[1:])
         maxPrice = None
-    elif price != None and price[0] == '+':
+    elif price != 0 and price[0] == '+':
         maxPrice = int(price[1:])
         minPrice = None
-    elif price != None:
+    elif price != 0:
         price = price.split(',')
         minPrice, maxPrice = int(price[0]), int(price[1])
 
@@ -339,16 +354,15 @@ def get_data():
         writer.writeheader()
         for row in scraped_data:
             writer.writerow(row)
-    filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize, minPrice, maxPrice)
-
+    data = filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize, minPrice, maxPrice)
+    return Response(jsonify(data).data)
 
 # Home page
 @app.route('/')
 def main():
 
-    return_val = render_template('index.html')
-    get_data()
-    return return_val
+    #get_data()
+    return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8081,debug=True)
+    app.run(host='0.0.0.0', port=8081, debug=True)
