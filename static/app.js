@@ -18,38 +18,51 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
     $scope.table_columns = ['Street', 'Zipcode'];
     $scope.table_results = {'street': '123 fun street', 'Zipcode': '12345'};
 
-    $http({url: 'map_data', method: "GET"}).then(function (map_data) {
-        console.log(map_data);
-    });
 
     $scope.search = {
         test: ["1", "2"],
         results: [
-            {"address": '50 bobby lane', "zipcode": 12345},
-			{"address": '51 bobby lane', "zipcode": 12346},
-			{"address": '52 bobby lane', "zipcode":12347}
+            {"address": '50 bobby lane', "postal_code": 12345},
+			{"address": '51 bobby lane', "postal_code": 12346},
+			{"address": '52 bobby lane', "postal_code":12347}
 			]};
     	$scope.search.results.push({});
 
     	// toggle results div class
     	$scope.showing_results = true;
 
+	$scope.townhouse = 0;
+	$scope.house = 0;
+	$scope.condo = 0;
+	$scope.beds = 0;
+	$scope.baths = 0;
+	$scope.location = "";
+	$scope.rating = 0;
+	$scope.size = 0;
+	$scope.price = "0,50000";
 
     $scope.submit_button = function () {
-        var types = [];
+        $scope.types = [];
+        $scope.types[0] = 'unknown';
+        var i = 1;
         if ($scope.townhouse == 1) {
-            types.append('Townhouse');
+            $scope.types[i] = 'Townhouse';
+            i++;
         }
         if ($scope.house == 1) {
-            types.append('House');
+            $scope.types[i] = 'House';
+            i++;
         }
         if ($scope.condo == 1) {
-            types.append('Condo');
+            $scope.types[i] = 'Condo';
         }
+
 
         var data = {
             'location': $scope.location,
-            'property_types': types,
+            'townhouse': $scope.townhouse,
+			'house': $scope.house,
+			'condo': $scope.condo,
             'rating': $scope.rating,
             'price': $scope.price,
             'beds': $scope.beds,
@@ -57,13 +70,33 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
             'size': $scope.size
         };
 
+
+        /*$http({url: 'map_data', method: "GET",param: data}).then(function (map_data) {
+        	console.log(map_data);
+    	});*/
+
         $http({
-            url: 'search_input',
+            url: '/get_data',
             method: "POST",
-            data: $.param(data),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success(function (data) {
-            console.log(data)
+            data: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        }).then(function (data) {
+            console.log(data);
+            for (i = 0; i < data.length; i++){
+            	$scope.search.results[i] = {'address':data[i][0],
+											'baths':data[i][1],
+											'beds': data[i][2],
+											'city':data[i][3],
+											'crimes':data[i][4],
+											'size':data[i][5],
+											'zip':data[i][6],
+											'price':data[i][7],
+											'state':data[i][8],
+											'type':data[i][9]}
+            }
+
+			$scope.search.results = data;
+			$scope.showing_results = true;
         });
 
 
