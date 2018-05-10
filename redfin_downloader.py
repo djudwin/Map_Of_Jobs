@@ -7,6 +7,7 @@ import builtins
 builtins.unicode = str
 from lxml import html
 import unicodecsv as csv
+import re
 
 import csv
 import time
@@ -315,36 +316,26 @@ def get_data():
     #while(request.args.get('data') == None):
     #    time.sleep(0.5)
 
-    print("\n\n\nHEREEEEEEE\n\n\n")
-    data = str(request.get_data()).split(',')
-    print("HIII" + str(data))
-    #print(data['location'][0])
-    minBedrooms = data[7].split(':')[1]  # minimum number of bedrooms
-    minBathrooms = data[8].split(':')[1]  # minimum number of bathrooms
-    types = [data[1].split(':')[1],data[2].split(':')[1],data[3].split(':')[1]]  # property types requested
+    data = re.search(r"\{\"location\":\"(\w+)\",\"townhouse\":(true|false|0),\"house\":(true|false|0),\"condo\":(true|false|0),\"rating\":(\d+),\"price\":\"([\d,]+)\",\"beds\":(\d+),\"baths\":([\d\.]+),\"size\":(\d+)\}", str(request.get_data())).groups()
+
+    minBedrooms = int(data[6])  # minimum number of bedrooms
+    minBathrooms = float(data[7])  # minimum number of bathrooms
+
+    # property types requested
+    true_values = ['true','True','1']
     propertyTypes = []
-    if types[0] == 'true':
+    if data[1] in true_values:
         propertyTypes.append('Townhouse')
-    if types[1] == 'true':
+    if data[2] in true_values:
         propertyTypes.append('House')
-    if types[2] == 'true:':
+    if data[3] in true_values:
         propertyTypes.append('Condo')
-    minHouseSize = data[9].split(':')[1].split('}')[0]  # minimum house size in sq ft
-    price = (data[5]+','+data[6]).split(':')[1]  # max house price
-    location = data[0].split(':')[1]
-    rating = data[4].split(':')[1]
-    minPrice = maxPrice = 0
-    #price = price.split(':')[1]
-    price = price.split('"')[1]
-    if price != 0 and price[0] == '-':
-        minPrice = int(price[1:])
-        maxPrice = None
-    elif price != 0 and price[0] == '+':
-        maxPrice = int(price[1:])
-        minPrice = None
-    elif price != 0:
-        price = price.split(',')
-        minPrice, maxPrice = int(price[0]), int(price[1])
+
+    minHouseSize = float(data[8])  # minimum house size in sq ft
+    location = str(data[0])
+    rating = int(data[4])
+    price = str(data[5]).split(',')  # min,max house price
+    minPrice, maxPrice = int(price[0]), int(price[1])
 
     # clean_folder()  # remove old csv files
     # location = 'Fort Smith, AR'
@@ -360,6 +351,7 @@ def get_data():
         for row in scraped_data:
             writer.writerow(row)
     data = filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize, minPrice, maxPrice)
+
     return Response(jsonify(data).data)
 
 # Home page

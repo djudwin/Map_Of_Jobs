@@ -4,9 +4,9 @@ var map_of_jobs = angular.module('map_of_jobs', ['ngMap', 'angularUtils.directiv
 
 map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window, NgMap) {
     NgMap.getMap().then(function (map) {
-        console.log(map.getCenter());
-        console.log('markers', map.markers);
-        console.log('shapes', map.shapes);
+        // console.log(map.getCenter());
+        // console.log('markers', map.markers);
+        // console.log('shapes', map.shapes);
     });
 
     $scope.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAnGj_CJuLQjEjd94i0MOvQVB4FDLRpdec";
@@ -63,18 +63,18 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
             'townhouse': $scope.townhouse,
 			'house': $scope.house,
 			'condo': $scope.condo,
-            'rating': $scope.rating,
+            'rating': parseInt($scope.rating),
             'price': $scope.price,
             'beds': $scope.beds,
             'baths': $scope.baths,
             'size': $scope.size
         };
 
-
-        /*$http({url: 'map_data', method: "GET",param: data}).then(function (map_data) {
+/*
+        $http({url: 'map_data', method: "GET",param: data}).then(function (map_data) {
         	console.log(map_data);
-    	});*/
-
+    	});
+*/
         $http({
             url: '/get_data',
             method: "POST",
