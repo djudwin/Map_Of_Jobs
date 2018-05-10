@@ -8,10 +8,10 @@ html * {
 }
 
 body{
-
-background: linear-gradient(to bottom, #7db9e8 0%,#bbdefb 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#bbdefb',GradientType=0 );
-
+	background: linear-gradient(to bottom, #70afe8 0%, #d8ecfb 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#bbdefb',GradientType=0 );
+	background-attachment: fixed;
+	background-repeat: revert;
 	text-align:center;
 }
 
@@ -30,7 +30,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', end
 	min-height: 300px;
 }
 
-/* 
+/*
 	SEARCH RESULTS
 */
 #map, #results-list {
@@ -55,28 +55,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', end
 #results-list {
 	width: 0%;
 	height: 100%;
-	text-align: left;
-	padding: 10px;
-	max-height: 300px;
-	overflow-y: auto;
-	display: inline-block;
-}
-#results-list .house {
-	border-bottom: 1px solid #0D47A1;
-	margin-bottom: 10px;
-	padding-bottom: 10px;;
-	transition: ease-in-out 0.1s all;
-}
-#results-list .house:hover {
-	background-color: rgba(255,255,255,0.5);
-}
-#results-list .header {
-	font-size: 14px;
-}
-#results-list p {
-	display: inline-block;
-	font-size: 12px;
-	margin: 0;
+	float: left;
 }
 
 /*
@@ -102,7 +81,4 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', end
 }
 #search-container input {
 	margin-bottom: 10px;
-}
-#search-container .search-form form {
-	column-count: 2;
 }
