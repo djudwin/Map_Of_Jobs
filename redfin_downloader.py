@@ -8,10 +8,6 @@ builtins.unicode = str
 from lxml import html
 import unicodecsv as csv
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import csv
 import time
 import glob
@@ -22,22 +18,11 @@ import re
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for, send_from_directory
 from flask_bower import Bower
 from flask_triangle import Triangle
-#from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 Bower(app)
 Triangle(app)
-
-# the file paths for the webdriver parameters will need to be modified to work on other computers
-#download_path = os.getcwd() + "/csv_data/"
-#fp = webdriver.FirefoxProfile()#"/Users/JessicaDeng/Library/Application Support/Firefox/Profiles/14aqd9s3.default-1525396620364")
-#fp.set_preference("browser.download.folderList", 2)
-#fp.set_preference("browser.download.manager.showWhenStarting", False)
-#fp.set_preference("browser.download.dir", download_path)
-#fp.set_preference("browser.helperApps.neverAsk.saveToDisk", "text/csv")
-
-#browser = webdriver.Firefox(firefox_profile=fp)
-#browser.get("https://www.redfin.com")
 
 
 class wait_for_page_load(object):
@@ -152,14 +137,15 @@ def parse(location,rating):
             state = ''.join(raw_state).strip() if raw_state else None
             postal_code = ''.join(raw_postal_code).strip() if raw_postal_code else None
             price = ''.join(raw_price).strip() if raw_price else None
-            price = price.split('$')[1] if price else None
-            price1, price2 = price.split(',') if price else None
-            price = int(price1) * 1000 + float(price2[:3]) if price1 and price2 else None
+            if price:
+                price = price.split('$')[1]
+                price1, price2 = price.split(',') if price else None
+                price = int(price1) * 1000 + float(price2[:3]) if price1 and price2 else None
             info = ' '.join(' '.join(raw_info).split()).replace(u"\xb7", ',')
             row = info.split(' ')
-            beds = row[0]
-            baths = row[3]
-            size = row[6]
+            beds = row[0] if row[0] != "--" else None
+            baths = row[3] if row[3] != "--" else None
+            size = row[6] if row[6] != "--" else None
             if size == '--':
                 size = None
             else:
@@ -223,15 +209,25 @@ def merge_data():
 
 
 @app.route('/map_data', methods=['GET'])
-def filter_data():
-    # we will need to get these parameters from the website:
-    minBedrooms = 1  # minimum number of bedrooms
-    minBathrooms = 1.0  # minimum number of bathrooms
-    propertyTypes = {'Townhouse', 'House', 'Condo'}  # property types requested
-    minHouseSize = 300  # minimum house size in sq ft
-    minPropertySize = 0  # minimum property size in sq ft
-    maxPrice = 300000  # max house price
-    maxCrimes = 1000  # max crimes per day
+
+def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,maxPrice):
+
+
+    # minBedrooms = request.form.get('beds')  # minimum number of bedrooms
+    # minBathrooms = request.form.get('baths')  # minimum number of bathrooms
+    # propertyTypes = request.form.get('property_types')  # property types requested
+    # minHouseSize = request.form.get('size')  # minimum house size in sq ft
+    # price = request.form.get('price')  # max house price
+    #
+    # if price[0] == '-':
+    #     minPrice = int(price[1:])
+    #     maxPrice = None
+    # elif price[0] == '+':
+    #     maxPrice = int(price[1:])
+    #     minPrice = None
+    # else:
+    #     price = price.split(',')
+    #     minPrice, maxPrice = int(price[0]), int(price[1])
 
     properties = open('_all_properties.csv', 'r')
     filtered = open('filtered_properties.csv', 'w')
@@ -255,7 +251,7 @@ def filter_data():
         elif row['type'] not in propertyTypes:
             print('type')
             keep = False
-        elif row['price'] and float(row['price']) > maxPrice:
+        elif row['price'] != "--" and float(row['price']) > maxPrice:
             print('price')
             keep = False
 
@@ -281,11 +277,11 @@ def filter_data():
                     else:
                         sum += float(num[0])
                     if count == 3:
-                        if(float(sum) / 30) > maxCrimes:
-                            print('crime: %d'%(int(sum)/30))
-                            keep = False
-                        else:
-                            row['crimes/day'] = float(sum) / 30
+                        # if(float(sum) / 90) > maxCrimes:
+                        #     print('crime: %d'%(int(sum)/90))
+                        #     keep = False
+                        # else:
+                        row['crimes/day'] = float(sum) / 90
                         break
         if keep:
             file2.append(row)
@@ -293,13 +289,6 @@ def filter_data():
     return jsonify(file2)
 
 
-'''clean_folder()  # remove old csv files
-collect_by_location('baltimore, MD')  # get all house listings in Baltimore MD
-#collect_by_location('21228')  # get all house listings in zip code 21228
-#collect_by_location('UMBC')  # get all house listings near UMBC
-merge_data()  # merge all house listings into one csv
-# From here we can sift on other parameters, like # bedrooms, # bathrooms, Property Type, House Size, and Property Size
-filter_data()'''
 
 '''
 @app.route('/map_data', methods=['GET'])
@@ -313,30 +302,53 @@ def push_to_front_end():
     return jsonify(data1)'''
 
 
-# Home page
-@app.route('/')
-def main():
-    #clean_folder()  # remove old csv files
-    #collect_by_location('baltimore, MD')  # get all house listings in Baltimore MD
-    #collect_by_location('21228')  # get all house listings in zip code 21228
-    #collect_by_location('UMBC')  # get all house listings near UMBC
-    #merge_data()  # merge all house listings into one csv
-    # From here we can sift on other parameters, like # bedrooms, # bathrooms, Property Type, House Size, and Property Size
-    location = 'catonsville-MD'
-    rating = 4
-    # sort = args.sort
-    print("Fetching data for %s" % (location))
+@app.route('/search_input', methods=['POST'])
+def get_data():
+
+    while(request.form.get('location') == None):
+        time.sleep(0.5)
+
+    minBedrooms = request.form.get('beds')  # minimum number of bedrooms
+    minBathrooms = request.form.get('baths')  # minimum number of bathrooms
+    propertyTypes = request.form.get('property_types')  # property types requested
+    minHouseSize = request.form.get('size')  # minimum house size in sq ft
+    price = request.form.get('price')  # max house price
+    location = request.form.get('location')
+    rating = request.form.get('rating')
+    minPrice = maxPrice = None
+    if price != None and price[0] == '-':
+        minPrice = int(price[1:])
+        maxPrice = None
+    elif price != None and price[0] == '+':
+        maxPrice = int(price[1:])
+        minPrice = None
+    elif price != None:
+        price = price.split(',')
+        minPrice, maxPrice = int(price[0]), int(price[1])
+
+    # clean_folder()  # remove old csv files
+    # location = 'Fort Smith, AR'
+    # rating = 4
+    # # sort = args.sort
+    # print("Fetching data for %s" % (location))
     scraped_data = parse(location, rating)
-    print("Writing data to output file")
+    # print("Writing data to output file")
     with open("_all_properties.csv", 'w')as csvfile:
         fieldnames = ['type', 'address', 'city', 'state', 'postal_code', 'price', 'beds', 'baths', 'house size', 'url']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for row in scraped_data:
             writer.writerow(row)
-    filter_data()
-    #push_to_front_end()
-    return render_template('index.html')
+    filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize, minPrice, maxPrice)
+
+
+# Home page
+@app.route('/')
+def main():
+
+    return_val = render_template('index.html')
+    get_data()
+    return return_val
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8081,debug=True)

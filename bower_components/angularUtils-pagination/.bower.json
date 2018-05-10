@@ -39,6 +39,10 @@
   },
   "_source": "https://github.com/michaelbromley/angularUtils-pagination.git",
   "_target": "^0.11.1",
+<<<<<<< HEAD
   "_originalSource": "angular-utils-pagination",
+=======
+  "_originalSource": "https://github.com/michaelbromley/angularUtils-pagination.git",
+>>>>>>> d4a2aaec4e15a79bbf872ebf6c39276cd6c87b87
   "_direct": true
 }
