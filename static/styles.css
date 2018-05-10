@@ -55,7 +55,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', end
 #results-list {
 	width: 0%;
 	height: 100%;
-	float: left;
+	text-align: left;
+	padding: 10px;
+	max-height: 300px;
+	overflow-y: auto;
+	display: inline-block;
+}
+#results-list .header {
+	font-size: 14px;
+}
+#results-list p {
+	display: inline-block;
+	font-size: 12px;
 }
 
 /*

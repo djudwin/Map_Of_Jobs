@@ -80,22 +80,9 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
             method: "POST",
             data: JSON.stringify(data),
             headers: {'Content-Type': 'application/json; charset=utf-8'}
-        }).then(function (data) {
-            console.log(data);
-            for (i = 0; i < data.length; i++){
-            	$scope.search.results[i] = {'address':data[i]['address'],
-											'baths':data[i]['baths'],
-											'beds': data[i]['beds'],
-											'city':data[i]['city'],
-											'crimes':data[i]['crimes'],
-											'size':data[i]['size'],
-											'zip':data[i]['postal_code'],
-											'price':data[i]['price'],
-											'state':data[i]['state'],
-											'type':data[i]['type']}
-            }
-
-			$scope.search.results = data;
+        }).then(function (result) {
+            console.log(result)
+			$scope.search.results = result.data;
 			$scope.showing_results = true;
         });
 

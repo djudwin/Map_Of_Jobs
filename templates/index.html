@@ -21,18 +21,17 @@
             <div id="results-list">
                 <h3>Results</h3>
 
-                <div ng-repeat="h in search.results">
+                <div class='house' ng-repeat="h in search.results">
                     <!--<h4>HELLO</h4>-->
-                    <h4>{{h.address|angular}}</h4>
-                    <p>{{h.city|angular}}</p>
-                    <p>{{h.state|angular}}</p>
-                    <p>{{h.zip|angular}}</p>
-                    <p>{{h.beds|angular}}</p>
-                    <p>{{h.baths|angular}}</p>
-                    <p>{{h.size|angular}}</p>
-                    <p>{{h.price|angular}}</p>
-                    <p>{{h.type|angular}}</p>
-                    <p>{{h.crimes|angular}}</p>
+                    <div class='header'>{{h.address|angular}} ({{h.type|angular}})</div>
+                    <p>{{h.city|angular}}, {{h.state|angular}} {{h.zip|angular}}</p>
+                    <p>
+                        {{h.beds|angular}} bed(s)</br>
+                        {{h.baths|angular}} bath(s)</br>
+                        {{h.size|angular}} sq ft.</br>
+                    </p>
+                    <p>price: ${{h.price|angular}}</p>
+                    <p>crime rate: {{h.crimes|angular}}</p>
 
                 </div>
 
@@ -68,9 +67,9 @@
                     <label>location</label><input type="text" ng-model="location" width=100px placeholder="enter 'city state' 'state' or 'zip'">
                    <br>
                    <label>Property Types:</label>
-                    <input type="checkbox" ng-model="townhouse" name="townhouse" value=1> <label for="townhouse">Townhouse</label>
-                    <input type="checkbox" ng-model="house" name="house" value=1> <label for="house">House</label>
-                    <input type="checkbox" ng-model="condo" name="condo" value=1> <label for="condo">Condo</label>
+                    <br/><input type="checkbox" ng-model="townhouse" name="townhouse" value=1> <label for="townhouse">Townhouse</label>
+                    <br/><input type="checkbox" ng-model="house" name="house" value=1> <label for="house">House</label>
+                    <br/><input type="checkbox" ng-model="condo" name="condo" value=1> <label for="condo">Condo</label>
                     <br>
                     <label>School Rating</label>
                     <select ng-model="rating">

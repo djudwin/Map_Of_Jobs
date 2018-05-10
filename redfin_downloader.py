@@ -354,7 +354,7 @@ def get_data():
         for row in scraped_data:
             writer.writerow(row)
     data = filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize, minPrice, maxPrice)
-
+    print(data)
     return Response(jsonify(data).data)
 
 # Home page
