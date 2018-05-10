@@ -8,7 +8,8 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
         <link rel="stylesheet" type="text/css" href="../static/styles.css">
-        <link href="{{ url_for('bower.static', filename='bootstrap\\dist\\css\\bootstrap.min.css') }}" rel="stylesheet">        <link rel="stylesheet" type="text/css" href="../static/styles.css">
+        <link href="{{ url_for('bower.static', filename='bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="../static/styles.css">
 	</head>
 	<body ng-controller="map_of_jobs_controller" style="text-align:center">
         <div class='site-header'>
@@ -21,8 +22,18 @@
                 <h3>Results</h3>
 
                 <div ng-repeat="h in search.results">
+                    <!--<h4>HELLO</h4>-->
                     <h4>{{h.address|angular}}</h4>
-                    <p>{{h.zipcode|angular}}</p>
+                    <p>{{h.city|angular}}</p>
+                    <p>{{h.state|angular}}</p>
+                    <p>{{h.zip|angular}}</p>
+                    <p>{{h.beds|angular}}</p>
+                    <p>{{h.baths|angular}}</p>
+                    <p>{{h.size|angular}}</p>
+                    <p>{{h.price|angular}}</p>
+                    <p>{{h.type|angular}}</p>
+                    <p>{{h.crimes|angular}}</p>
+
                 </div>
 
                 <!--table class="table table-striped table-hover">
@@ -51,18 +62,18 @@
         </div>
 
         <div id="search-container">
-            <div class="search-form" ng-submit="search.submit()">
+            <div class="search-form"><!-- ng-submit="search.submit()"-->
                 <h3>Search for housing</h3>
                 <form novalidate>
                     <label>location</label><input type="text" ng-model="search.street" placeholder="enter 'city state' or 'zip'">
++                   <br>
++                   <label>Property Types:</label>
+                    <input type="checkbox" ng-model="townhouse" name="townhouse" value=1> <label for="townhouse">Townhouse</label>
+                    <input type="checkbox" ng-model="house" name="house" value=1> <label for="house">House</label>
+                    <input type="checkbox" ng-model="condo" name="condo" value=1> <label for="condo">Condo</label>
                     <br>
-                    <label>Property Types:</label>  
-                    <input type="checkbox" ng-model="search.townhouse" name="townhouse" value=1> <label for="townhouse">Townhouse</label>
-                    <input type="checkbox" ng-model="search.house" name="house" value=1> <label for="house">House</label>
-                    <input type="checkbox" ng-model="search.condo" name="condo" value=1> <label for="condo">Condo</label>
-                    <br>
-                    <label>Rating:</label>
-                    <select ng-model="search.rating">
+                    <label>School Rating</label>
+                    <select ng-model="rating">
                         <option value=1>1</option>
                         <option value=2>2</option>
                         <option value=3>3</option>
@@ -75,40 +86,48 @@
                         <option value=10>10</option>
                     </select>
                     <br>
-                    <label for="beds">Bedrooms</label><input type="number" name="beds" ng-model="search.beds" step="1" min="0">
-                    <br> 
-                    <label for="baths">Bathrooms</label><input type="number" name="baths" ng-model="search.baths" step="0.5" min="0"> 
-                    <br>
-                    <label for="price">Price range</label>
-                    <select name="price" ng-model = "search.price">
-                        <option value="-50000"><50,000</option>
-                        <option value="50000,100000">50,000 - 100,000</option>
-                        <option value="100000,150000">100,000 - 150,000</option>
-                        <option value="150000,200000">150,000 - 200,000</option>
-                        <option value="200000,250000">200,000 - 250,000</option>
-                        <option value="250000,300000">250,000 - 300,000</option>
-                        <option value="300000,350000">300,000 - 350,000</option>
-                        <option value="350000,400000">350,000 - 400,000</option>
-                        <option value="400000,450000">400,000 - 450,000</option>
-                        <option value="450000,500000">450,000 - 500,000</option>
-                        <option value="500000,600000">500,000 - 600,000</option>
-                        <option value="600000,700000">600,000 - 700,000</option>
-                        <option value="700000,800000">700,000 - 800,000</option>
-                        <option value="800000,900000">800,000 - 900,000</option>
-                        <option value="900000,1000000">900,000 - 1,000,000</option>
-                        <option value="+1000000">1,000,000+</option>
++                    <label for="beds">Bedrooms</label><input type="number" name="beds" ng-model="search.beds" step="1" min="0">
++                    <br>
++                    <label for="baths">Bathrooms</label><input type="number" name="baths" ng-model="search.baths" step="0.5" min="0">
++                    <br>
++                    <label for="price">Price range</label>
++                    <select name="price" ng-model = "search.price">
+                    <select ng-model = "price">
+                        <option value="0,50000"><$50,000</option>
+                        <option value="50000,100000">$50,000 - $100,000</option>
+                        <option value="100000,150000">$100,000 - $150,000</option>
+                        <option value="150000,200000">$150,000 - $200,000</option>
+                        <option value="200000,250000">$200,000 - $250,000</option>
+                        <option value="250000,300000">$250,000 - $300,000</option>
+                        <option value="300000,350000">$300,000 - $350,000</option>
+                        <option value="350000,400000">$350,000 - $400,000</option>
+                        <option value="400000,450000">$400,000 - $450,000</option>
+                        <option value="450000,500000">$450,000 - $500,000</option>
+                        <option value="500000,600000">$500,000 - $600,000</option>
+                        <option value="600000,700000">$600,000 - $700,000</option>
+                        <option value="700000,800000">$700,000 - $800,000</option>
+                        <option value="800000,900000">$800,000 - $900,000</option>
+                        <option value="900000,1000000">$900,000 - $1,000,000</option>
+                        <option value="1000000,99999999999999">$1,000,000+</option>
                     </select>
+
                     <br>
-                    <label for="size">Minimum House Size in SqFt</label>
-                    <input type="number" name="size" ng-model="search.size" step="50" min="0"> 
-                    <br>
++                   <label for="size">Minimum House Size in SqFt</label>
++                   <input type="number" name="size" ng-model="search.size" step="50" min="0">
++                   <br>
+                    <button ng-click="submit_button()">SUBMIT</button>
                 </form>
-                <button ng-click="submit_button()">SUBMIT</button>
             </div>
 
         </div>
 
-        <script src="{{ url_for('bower.static', filename='jquery\\dist\\jquery.min.js') }}"></script>        <script src="{{ url_for('bower.static', filename='bootstrap\\dist\\js\\bootstrap.min.js') }}"></script>        <script src="{{ url_for('bower.static', filename='angular\\angular.min.js') }}"></script>        <script src="{{ url_for('bower.static', filename='angularUtils-pagination\\dirPagination.js') }}"></script>        <script src="{{ url_for('bower.static', filename='ngmap\\build\\scripts\\ng-map.min.js') }}"></script>        <script src="http://maps.google.com/maps/api/js?key=AIzaSyAnGj_CJuLQjEjd94i0MOvQVB4FDLRpdec"></script>
+        <script src="{{ url_for('bower.static', filename='jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('bower.static', filename='angular/angular.min.js') }}"></script>
+        <script src="{{ url_for('bower.static', filename='angularUtils-pagination/dirPagination.js') }}"></script>
+        <script src="{{ url_for('bower.static', filename='ngmap/build/scripts/ng-map.min.js') }}"></script>
+        <script src="http://maps.google.com/maps/api/js?key=AIzaSyAnGj_CJuLQjEjd94i0MOvQVB4FDLRpdec"></script>
         <script src="{{ url_for('static', filename='app.js') }}"></script>
+
 	</body>
 </html>
