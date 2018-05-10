@@ -83,16 +83,16 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
         }).then(function (data) {
             console.log(data);
             for (i = 0; i < data.length; i++){
-            	$scope.search.results[i] = {'address':data[i][0],
-											'baths':data[i][1],
-											'beds': data[i][2],
-											'city':data[i][3],
-											'crimes':data[i][4],
-											'size':data[i][5],
-											'zip':data[i][6],
-											'price':data[i][7],
-											'state':data[i][8],
-											'type':data[i][9]}
+            	$scope.search.results[i] = {'address':data[i]['address'],
+											'baths':data[i]['baths'],
+											'beds': data[i]['beds'],
+											'city':data[i]['city'],
+											'crimes':data[i]['crimes'],
+											'size':data[i]['size'],
+											'zip':data[i]['postal_code'],
+											'price':data[i]['price'],
+											'state':data[i]['state'],
+											'type':data[i]['type']}
             }
 
 			$scope.search.results = data;
