@@ -22,7 +22,7 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
     // toggle results div class
 	$scope.showing_results = true;
 
-	$scope.table_columns = ['type','address', 'city', 'state','zip','beds','baths','price','size','crimes'];
+	$scope.table_columns = ['type','address', 'city', 'state','zip','beds','baths','price','size','crimes','latitude','longitude'];
 	$scope.table_results = []; //{'street': '123 fun street', 'Zipcode': '12345'};
 
 
