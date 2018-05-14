@@ -9,11 +9,9 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
         console.log('shapes', map.shapes);
     });
 
+
     $scope.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAnGj_CJuLQjEjd94i0MOvQVB4FDLRpdec";
 
-    $scope.populateMap = function () {
-        console.log('hi')
-    };
 
 
     $scope.search = {
@@ -67,6 +65,10 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
         }).then(function (data) {
             //console.log(data);
 			console.log(data);
+			$scope.table_results = [];
+			if(data.data.length === 0){
+			    $scope.table_results.push({'type':'No Results'})
+            }
 
             for (var i = 0; i < data.data.length; i++){
             	$scope.table_results.push({'type':data.data[i]['type'],
@@ -78,12 +80,12 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 											'baths':data.data[i]['baths'],
 											'price':data.data[i]['price'],
 											'size':data.data[i]['size'],
-											'crimes':data.data[i]['crimes']}
+											'crimes':data.data[i]['crimes'],
+                                            'latitude':data.data[i]['lat'],
+                                            'longitude':data.data[i]['long']}
 											);
-            	//console.log("hello");
             }
 
-			//$scope.search.results = data;
 			$scope.showing_results = true;
         });
 
