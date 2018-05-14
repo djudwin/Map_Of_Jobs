@@ -26,91 +26,27 @@ Bower(app)
 Triangle(app)
 
 
-class wait_for_page_load(object):
+def parse(location):
+    files = ["baltimore", "california", "ca", "orlando", "21220", "72904"]
 
-    def __init__(self, browser):
-        self.browser = browser
+    location = location.split(',')[0].lower().replace('"','')
+    print(location in files)
+    if location == "ca":
+        location = "california"
+    if str(location) in files:
 
-    def __enter__(self):
-        self.old_page = self.browser.find_element_by_tag_name('html')
-
-    def page_has_loaded(self):
-        new_page = self.browser.find_element_by_tag_name('html')
-        return new_page.id != self.old_page.id
-
-    def __exit__(self, *_):
-        wait_for(self.page_has_loaded)
-
-
-def wait_for(condition_function):
-    start_time = time.time()
-    while time.time() < start_time + 3:
-        if condition_function():
-            return True
-        else:
-            time.sleep(0.1)
-    raise Exception(
-        'Timeout waiting for {}'.format(condition_function.__name__)
-    )
-
-
-# cleans the last search data. should be called before each new search
-def clean_folder():
-    folder = os.getcwd() + '/csv_data'
-    skip = {os.getcwd() + '/csv_data/old_fault_file.csv', os.getcwd() + '/csv_data/old_success.csv',
-            os.getcwd() + '/csv_data/_fault_file.csv',
-            os.getcwd() + '/csv_data/_success.csv'}
-    for the_file in os.listdir(folder):
-        file_path = os.path.join(folder, the_file)
-        if file_path in skip:
-            continue
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-        except Exception as e:
-            print(e)
-
-
-# def collect_by_location(keys):
-#
-#     if keys is None:
-#         print("error: please enter a location")
-#         return
-#     try:
-#         with wait_for_page_load(browser):
-#             browser.get("https://www.redfin.com")
-#     except:
-#         browser.get("https://www.redfin.com")
-#
-#     elem = WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "search-input-box")))
-#     elem.clear()
-#     elem.send_keys(keys)
-#
-#     try:
-#         with wait_for_page_load(browser):
-#             browser.find_element_by_class_name("search-input-box").submit()
-#     except:
-#         pass
-#     # Check for an unrecognized city
-#     if browser.current_url == 'https://www.redfin.com/':
-#         print('No listings for ' + keys)
-#     else:
-#         # find download link. Throw exception for a city with no listings
-#         try:
-#             elem = WebDriverWait(browser, 3).until(
-#                 EC.presence_of_element_located((By.CLASS_NAME, "downloadLink"))).click()
-#         except:
-#             print('No download for ' + keys)
-
-
-def parse(location,rating):
-    link = ("https://www.zillow.com/homes/for_sale/%s/prcu%sb_sch"%(location,rating))
+        parser = html.fromstring(open("%s.html" % location).read().replace('\n', ''))
+    else:
+        link = ("https://www.zillow.com/homes/for_sale/%s"%(location))
+        parser = None
+        link.replace('"', '')
     error = False
     properties_list = []
-    for p in range(2):
+    for p in range(1):
         if p > 0:
-            link = ("https://www.zillow.com/homes/for_sale/%s/%s_p/prcu%sb_sch"%(location,str(p+1),rating))
-        print(link)
+            link = ("https://www.zillow.com/homes/for_sale/%s/10_zm/%s_p"%(location,str(p+1)))
+            link = link.replace('"', '')
+            print(link)
         for i in range(1):
             # try:
             headers = {
@@ -122,13 +58,14 @@ def parse(location,rating):
                 'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
             }
             time.sleep(1)
-            try:
-                response = requests.get(link, headers=headers)
-            except ConnectionError:
-                print("error at page: " + str(p))
-                error = True
-                break
-            parser = html.fromstring(response.text)
+            if parser is None:
+                try:
+                    response = requests.get(link, headers=headers)
+                except ConnectionError:
+                    print("error at page: " + str(p))
+                    error = True
+                    break
+                parser = html.fromstring(response.text)
             search_results = parser.xpath("//div[@id='search-results']//article")
             print(search_results)
             for properties in search_results:
@@ -141,8 +78,8 @@ def parse(location,rating):
                 raw_broker_name = properties.xpath(".//span[@class='zsg-photo-card-broker-name']//text()")
                 url = properties.xpath(".//a[contains(@class,'overlay-link')]/@href")
                 raw_title = properties.xpath(".//h4//text()")
-                latitude = properties.xpath(".//span[@itemprop='geo']//meta[@itemprop='latitude']//text()")
-                longitude = properties.xpath(".//span[@itemprop='geo']//meta[@itemprop='longitude']//text()")
+                latitude = properties.xpath(".//span[@itemprop='geo']//meta[@itemprop='latitude']//@content")[0]
+                longitude = properties.xpath(".//span[@itemprop='geo']//meta[@itemprop='longitude']//@content")[0]
                 latitude = float(''.join(latitude).strip()) if latitude else None
                 longitude = float(longitude) if longitude else None
                 address = ' '.join(' '.join(raw_address).split()) if raw_address else None
@@ -211,39 +148,9 @@ def parse(location,rating):
     # 	print ("Failed to process the page",url)
 
 
-
-def merge_data():
-    interesting_files = glob.glob(os.getcwd() + "/csv_data/*.csv")
-    skip = {os.getcwd() + '/csv_data/old_fault_file.csv', os.getcwd() + '/csv_data/old_success.csv',
-            os.getcwd() + '/csv_data/_all_properties.csv', os.getcwd() + '/csv_data/_fault_file.csv',
-            os.getcwd() + '/csv_data/_success.csv'}
-    header_saved = False
-    with open('_all_properties.csv', 'w') as fout:
-        for filename in interesting_files:
-            with open(filename) as fin:
-                if filename in skip:
-                    print("skip: " + filename)
-                    continue
-                header = next(fin)
-                if not header_saved:
-                    fout.write(header)
-                    header_saved = True
-                for line in fin:
-                    fout.write(line)
-
-        # remove duplicate houses
-        seen = set()  # set for fast O(1) amortized lookup
-        for line in fileinput.FileInput('_all_properties.csv', inplace=1):
-            if line in seen:
-                continue  # skip duplicate
-
-            seen.add(line)
-            print(line)  # standard output is now redirected to the file
-
-
 #@app.route('/map_data', methods=['GET'])
 
-def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,maxPrice):
+def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,maxPrice,rating):
 
 
     # minBedrooms = request.form.get('beds')  # minimum number of bedrooms
@@ -281,7 +188,7 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
         elif row['baths'] and float(row['baths']) < float(minBathrooms):
             print('bt')
             keep = False
-        elif row['type'] not in propertyTypes:
+        elif row['type'] not in propertyTypes and row['type'] != propertyTypes[0]:
             print('t')
             keep = False
         elif row['price'] != "--" and (float(row['price']) > float(maxPrice) or float(row['price']) < float(minPrice)):
@@ -316,6 +223,23 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
                         # else:
                         row['crimes'] = float(sum) / 90
                         break
+            r = requests.get("https://api.greatschools.org/districts/%s/%s?key=789465c59cb4dd30f6e3670e9d4aef31" % (state, city))
+            print(r.text)
+            keep = False
+            i = 0
+            for school in r:
+                if 'districtRating' not in str(school):
+                    continue
+                #school = school.json()
+                print(school)
+                data = str(school).split("districtRating>")
+                dist_rating = data[1].split('<')[0]
+                if dist_rating == '':
+                    data = str(school).split("</districtRating")
+                    dist_rating = data[0].split('>')[1]
+                if dist_rating == '' or int(dist_rating) >= int(rating.replace('"','')):
+                    keep = True
+
         if keep:
             file2.append(row)
 
@@ -365,7 +289,7 @@ def get_data():
 
     # clean_folder()  # remove old csv files
     # print("Fetching data for %s" % (location))
-    scraped_data = parse(location, rating)
+    scraped_data = parse(location)
     # print("Writing data to output file")
     with open("_all_properties.csv", 'w')as csvfile:
         fieldnames = ['type', 'address', 'city', 'state', 'postal_code', 'price', 'beds', 'baths', 'size', 'url', 'lat', 'long']
@@ -373,15 +297,13 @@ def get_data():
         writer.writeheader()
         for row in scraped_data:
             writer.writerow(row)
-    data = filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize, minPrice, maxPrice)
+    data = filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize, minPrice, maxPrice, rating)
     return Response(jsonify(data).data)
 
 # Home page
 @app.route('/')
 def main():
-
-    #get_data()
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8082, debug=True)
+    app.run(host='0.0.0.0', port=8001, debug=True)
