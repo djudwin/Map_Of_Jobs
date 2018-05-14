@@ -27,12 +27,9 @@ Triangle(app)
 
 
 def parse(location):
-    files = ["baltimore", "california", "ca", "orlando", "21220", "72904"]
+    files = ["baltimore", "20723"]
 
     location = location.split(',')[0].lower().replace('"','')
-    print(location in files)
-    if location == "ca":
-        location = "california"
     if str(location) in files:
 
         parser = html.fromstring(open("%s.html" % location).read().replace('\n', ''))
@@ -42,11 +39,13 @@ def parse(location):
         link.replace('"', '')
     error = False
     properties_list = []
-    for p in range(1):
+    for p in range(3):
         if p > 0:
-            link = ("https://www.zillow.com/homes/for_sale/%s/10_zm/%s_p"%(location,str(p+1)))
-            link = link.replace('"', '')
-            print(link)
+            if str(location) in files:
+                parser = html.fromstring(open("%s%s.html" % (location,str(p+1))).read().replace('\n', ''))
+            else:
+                link = ("https://www.zillow.com/homes/for_sale/%s/10_zm/%s_p"%(location,str(p+1)))
+                link = link.replace('"', '')
         for i in range(1):
             # try:
             headers = {
@@ -188,11 +187,10 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
         elif row['baths'] and float(row['baths']) < float(minBathrooms):
             print('bt')
             keep = False
-        elif row['type'] not in propertyTypes and row['type'] != propertyTypes[0]:
+        elif row['type'] not in propertyTypes and row['type'] != 'unknown' and row['type'] != propertyTypes[0]:
             print('t')
             keep = False
-        elif row['price'] != "--" and (float(row['price']) > float(maxPrice) or float(row['price']) < float(minPrice)):
-
+        elif row['price'] != "--" and row['price'] != '' and (float(row['price']) > float(maxPrice) or float(row['price']) < float(minPrice)):
             keep = False
 
         else:
@@ -225,19 +223,25 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
                         break
             r = requests.get("https://api.greatschools.org/districts/%s/%s?key=789465c59cb4dd30f6e3670e9d4aef31" % (state, city))
             print(r.text)
-            keep = False
             i = 0
-            for school in r:
-                if 'districtRating' not in str(school):
-                    continue
-                #school = school.json()
-                print(school)
-                data = str(school).split("districtRating>")
-                dist_rating = data[1].split('<')[0]
-                if dist_rating == '':
-                    data = str(school).split("</districtRating")
-                    dist_rating = data[0].split('>')[1]
-                if dist_rating == '' or int(dist_rating) >= int(rating.replace('"','')):
+            if rating != "":
+                keep2 = False
+                for school in r:
+                    if 'districtRating' not in str(school):
+                        continue
+                    #school = school.json()
+                    print(str(school))
+                    data = str(school).split("districtRating>")
+                    dist_rating = data[1].split('<')[0]
+                    if dist_rating == '':
+                        data = str(school).split("</districtRating")
+                        dist_rating = data[0].split('>')[1]
+                    if dist_rating == '' or int(dist_rating) >= int(rating.replace('"','')):
+                        keep2 = True
+                    else:
+                        print(dist_rating)
+                    i+=1
+                if keep2 or i <= 1:
                     keep = True
 
         if keep:
@@ -277,10 +281,13 @@ def get_data():
         propertyTypes.append('House')
     if types[2] == 'true:':
         propertyTypes.append('Condo')
+    if len(propertyTypes) == 0:
+        return Response(jsonify([]))
     minHouseSize = data[9].split(':')[1].split('}')[0]  # minimum house size in sq ft
     price = (data[5]+','+data[6]).split(':')[1]  # house price range
     location = data[0].split(':')[1]
     rating = data[4].split(':')[1]
+    print("rating is ", rating)
     minPrice = maxPrice = 0
     #price = price.split(':')[1]
     price = price.split('"')[1]
