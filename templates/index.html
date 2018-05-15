@@ -20,11 +20,7 @@
         <div id="map-container">
 
             <div id="map" map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="{{googleMapsUrl|angular}}">
-                <ng-map center="41,-87" zoom="3">
-                    <marker ng-repeat="m in vm.mymarkers"
-                            position="{{m.pos}}"
-                            data="{{m.address}}"
-                            title="pos: {{m.pos}}"></marker>
+                <ng-map center="41,-87" zoom="4" style="display: block; height: 400px;">
                 </ng-map>
             </div>
         </div>
@@ -33,7 +29,7 @@
             <div class="search-form"><!-- ng-submit="search.submit()"-->
                 <h3>Search for housing</h3>
                 <form novalidate>
-                    <label>location</label><input type="text" ng-model="location" size="50" placeholder="enter 'city state', 'state' or 'zip'">
+                    <label>location</label><input type="text" ng-model="location" size="70" placeholder="enter 'address', 'neighborhood', 'city state', 'state' or 'zip'">
                     <br>
                     <label>Property Types:</label>
                     <input type="checkbox" ng-model="townhouse" name="townhouse" value='true'> <label for="townhouse">Townhouse</label>
