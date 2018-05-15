@@ -6,3 +6,7 @@ Required python 3 modules
 - unicodecsv
 - requests
 - bs4
+
+
+Please Note:
+Zillow.com just recently started blocking our html parser requests, so your searches may return no results. Because of this, we have downloaded the html source code from zillow search results for several locations. Try searching for "baltimore, md" and zipcode "20723". We appologize for the inconvenience and have screenshots showing evidence of it working previously.
