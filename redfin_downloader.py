@@ -27,12 +27,12 @@ Triangle(app)
 
 
 def parse(location):
-    files = ["baltimore", "20723"]
+    files = ["baltimore", "20723", "california", "uppereastside", "hawaii"]
 
     location = location.split(',')[0].lower().replace('"','')
     if str(location) in files:
 
-        parser = html.fromstring(open("%s.html" % location).read().replace('\n', ''))
+        parser = html.fromstring(open("downloads/%s.html" % location).read().replace('\n', ''))
     else:
         link = ("https://www.zillow.com/homes/for_sale/%s"%(location))
         parser = None
@@ -42,7 +42,7 @@ def parse(location):
     for p in range(3):
         if p > 0:
             if str(location) in files:
-                parser = html.fromstring(open("%s%s.html" % (location,str(p+1))).read().replace('\n', ''))
+                parser = html.fromstring(open("downloads/%s%s.html" % (location,str(p+1))).read().replace('\n', ''))
             else:
                 link = ("https://www.zillow.com/homes/for_sale/%s/10_zm/%s_p"%(location,str(p+1)))
                 link = link.replace('"', '')
