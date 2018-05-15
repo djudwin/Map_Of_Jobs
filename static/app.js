@@ -3,21 +3,35 @@
 var map_of_jobs = angular.module('map_of_jobs', ['ngMap', 'angularUtils.directives.dirPagination']);
 
 map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window, NgMap) {
+    $scope.mymarkers = [];
     NgMap.getMap().then(function (map) {
         console.log(map.getCenter());
-        console.log('markers', map.markers);
+        console.log('markers', map.mymarkers);
         console.log('shapes', map.shapes);
+
     });
+
+    //var infowindow = new google.maps.InfoWindow({});
+
+	//var marker, i;
+
+	/*for (i = 0; i < mymarkers.length; i++) {
+		marker = new google.maps.Marker({
+			position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+			map: map
+		});
+
+		google.maps.event.addListener(marker, 'click', (function (marker, i) {
+			return function () {
+				infowindow.setContent(locations[i][0]);
+				infowindow.open(map, marker);
+			}
+		})(marker, i));
+	}
+	*/
 
 
     $scope.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAnGj_CJuLQjEjd94i0MOvQVB4FDLRpdec";
-
-
-
-    $scope.search = {
-        test: ["1", "2"],
-        results: []};
-    $scope.search.results.push({});
 
     // toggle results div class
 	$scope.showing_results = true;
@@ -36,6 +50,7 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 	$scope.size = 0;
 	$scope.rating = 1;
 	$scope.price = "0,100000";
+
 
     $scope.submit_button = function () {
 
@@ -84,9 +99,13 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
                                             'latitude':data.data[i]['lat'],
                                             'longitude':data.data[i]['long']}
 											);
+            	var address = data.data[i]['address'] + ', ' + data.data[i]['city'] + ', ' + data.data[i]['state'] + ', ' + data.data[i]['postal_code'];
+            	$scope.mymarkers.push({address:address,pos:data.data[i]['lat']+','+data.data[i]['long']})
             }
 
+            //console.log(map.mymarkers);
 			$scope.showing_results = true;
+			$scope.refresh();
         });
 
 
