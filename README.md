@@ -6,6 +6,11 @@ Required python 3 modules
 - unicodecsv
 - requests
 - bs4
+- flask
+- flask_bower
+- flask_triangle
+- requests
+- csv
 
 
 Please Note:
