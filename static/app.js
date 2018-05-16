@@ -13,42 +13,16 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
         mymap = map;
 
     });
-    /*function initialize() {
-        var mapProp = {
-            center: new google.maps.LatLng(38, -78),
-            zoom: 6,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        map = new google.maps.Map(document.getElementById('map'), mapProp);
-    }*/
-    //var infowindow = new google.maps.InfoWindow({});
-
-	//var marker, i;
-
-	/*for (i = 0; i < mymarkers.length; i++) {
-		marker = new google.maps.Marker({
-			position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-			map: map
-		});
-
-		google.maps.event.addListener(marker, 'click', (function (marker, i) {
-			return function () {
-				infowindow.setContent(locations[i][0]);
-				infowindow.open(map, marker);
-			}
-		})(marker, i));
-	}
-	*/
 
 
     $scope.googleMapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAnGj_CJuLQjEjd94i0MOvQVB4FDLRpdec";
     // toggle results div class
 	$scope.showing_results = true;
 
-	$scope.table_columns = ['type','address', 'city', 'state','zip','beds','baths','price','size','crimes','latitude','longitude'];
-	$scope.table_results = []; //{'street': '123 fun street', 'Zipcode': '12345'};
+	$scope.table_columns = ['type','address', 'city', 'state','zip','beds','baths','price','size','crimes','latitude','longitude','school_rating'];
+	$scope.table_results = [];
 
-
+    //search input variables
 	$scope.townhouse = 0;
 	$scope.house = 0;
 	$scope.condo = 0;
@@ -61,9 +35,10 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
 	$scope.price = "0,100000";
 
 
+	//user hit submit -- send data to backend
     $scope.submit_button = function () {
 
-
+        //enter data to dictionary
         var data = {
             'location': $scope.location,
             'townhouse': $scope.townhouse,
@@ -76,26 +51,20 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
             'size': $scope.size
         };
 
-
-        /*$http({url: 'map_data', method: "GET",param: data}).then(function (map_data) {
-        	console.log(map_data);
-    	});*/
-        var markers = [];
-
+        //send post request to backend with data
         $http({
             url: '/get_data',
             method: "POST",
             data: JSON.stringify(data),
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         }).then(function (data) {
-            //console.log(data);
-			console.log(data);
 			$scope.table_results = [];
 			if(data.data.length === 0){
 			    $scope.table_results.push({'type':'No Results'})
             }
-            var lat = 0;
-            var long = 0;
+
+            var bounds = new google.maps.LatLngBounds();
+			//get returned results data and append to table
             for (var i = 0; i < data.data.length; i++) {
                 $scope.table_results.push({
                         'type': data.data[i]['type'],
@@ -109,12 +78,17 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
                         'size': data.data[i]['size'],
                         'crimes': data.data[i]['crimes'],
                         'latitude': data.data[i]['lat'],
-                        'longitude': data.data[i]['long']
+                        'longitude': data.data[i]['long'],
+                        'school_rating': data.data[i]['rating']
                     }
                 );
-                lat += parseFloat(data.data[i]['lat']);
-                long += parseFloat(data.data[i]['long']);
+
+                //extend bounds to zoom to to include every house
+                bounds.extend(new google.maps.LatLng(parseFloat(data.data[i]['lat']), parseFloat(data.data[i]['long'])));
+
                 var address = data.data[i]['address'] + ', ' + data.data[i]['city'] + ', ' + data.data[i]['state'] + ', ' + data.data[i]['postal_code'];
+
+                //add marker with 'click' listener for each house
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(parseFloat(data.data[i]['lat']), parseFloat(data.data[i]['long'])),
                     map: mymap,
@@ -131,11 +105,9 @@ map_of_jobs.controller('map_of_jobs_controller', function($scope, $http, $window
                 })(marker, data);
 
             }
-            lat /= data.data.length;
-            long /= data.data.length;
-            mymap.panTo(new google.maps.LatLng(lat,long));
-            mymap.setZoom(12);
-            //console.log(map.mymarkers);
+            //zoom to houses
+            mymap.fitBounds(bounds);
+            //show table of houses
 			$scope.showing_results = true;
         });
 
