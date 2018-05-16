@@ -220,6 +220,7 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
             #if rating != "":
             keep2 = False
             dist_rating = None
+            best_rating = None
             # check each district in the house's city. if at least one district has a rating at least as high
             # as the user wanted, keep the house. otherwise, don't keep the house
             for school in r:
@@ -231,12 +232,14 @@ def filter_data(minBedrooms, minBathrooms, propertyTypes, minHouseSize,minPrice,
                     data = str(school).split("</districtRating")
                     dist_rating = data[0].split('>')[1]
                 if dist_rating == '' or int(dist_rating) >= int(rating.replace('"','')):
+                    if best_rating is None or int(dist_rating) > best_rating:
+                        best_rating = int(dist_rating)
                     keep2 = True
                 i+=1
             if keep2 or i <= 1:
                 keep = True
             # add school rating to results
-            row['rating'] = dist_rating
+            row['rating'] = best_rating
 
         if keep:
             file2.append(row)
